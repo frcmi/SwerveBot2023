@@ -114,7 +114,9 @@ public final class Constants {
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 10;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(165.478515625);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(165.478515625); /* this number should be 200deg but 
+             at 200 deg the wheel does not rotate back to the forward position(returns to 268deg ).
+              but when the offset is this number */
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
