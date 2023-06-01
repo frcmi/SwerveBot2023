@@ -24,11 +24,13 @@ public class RobotContainer {
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
-    private final int rotationAxis = XboxController.Axis.kRightX.value;
+    private final int rotationAxis = 2; //XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
+    private final JoystickButton resetPositionButton = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -59,6 +61,8 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        resetPositionButton.onTrue(new InstantCommand(s_Swerve::resetModulesToAbsolute));
+
     }
 
     /**
