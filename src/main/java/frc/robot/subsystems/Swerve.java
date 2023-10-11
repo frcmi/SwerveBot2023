@@ -24,6 +24,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.*;
+
 
 public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
@@ -129,17 +132,25 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
     }
-    public Command followTrajectoryCommand(PathPlannerTrajectory traj) {
-            return new PPSwerveControllerCommand(
-                traj, 
-                this::getPose, // Pose supplier
-                Constants.Swerve.swerveKinematics, // SwerveDriveKinematics
-                new PIDController(Constants.Swerve.driveKP, Constants.Swerve.driveKI, Constants.Swerve.driveKD), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                new PIDController(Constants.Swerve.driveKP, Constants.Swerve.driveKI, Constants.Swerve.driveKD), // Y controller (usually the same values as left controller)
-                new PIDController(Constants.Swerve.angleKP, Constants.Swerve.angleKI, Constants.Swerve.angleKD), // Rotation controller
-                this::setModuleStates, 
-                true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
-                this // Requires this drive subsystem
+    public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+            return new SequentialCommandGroup(
+                new InstantCommand(() -> {
+                    // Reset odometry for the first path you run during auto
+                    if(isFirstPath){
+                        this.resetOdometry(traj.getInitialHolonomicPose());
+                    }
+                  }),
+                new PPSwerveControllerCommand(
+                    traj, 
+                    this::getPose, // Pose supplier
+                    Constants.Swerve.swerveKinematics, // SwerveDriveKinematics
+                    new PIDController(Constants.Swerve.driveKP, Constants.Swerve.driveKI, Constants.Swerve.driveKD), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                    new PIDController(Constants.Swerve.driveKP, Constants.Swerve.driveKI, Constants.Swerve.driveKD), // Y controller (usually the same values as left controller)
+                    new PIDController(Constants.Swerve.angleKP, Constants.Swerve.angleKI, Constants.Swerve.angleKD), // Rotation controller
+                    this::setModuleStates, 
+                    true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+                    this // Requires this drive subsystem
+                )
             );
     }
 }
