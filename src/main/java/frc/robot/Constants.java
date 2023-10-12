@@ -147,4 +147,41 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+
+    public static final class IntakeConstants {
+        public static final int kLeftMotorId = 0; // Need to change
+        public static final int kRightMotorId = 0; // Need to change
+        public static final double kIntakeSpeed = 0.5; // Percent
+
+    }
+
+    public static final class ArmConstants {
+        public static final int kLeftMotorId = 0; // Need to change
+        public static final int kRightMotorId = 0; // Need to change
+        public static final double kIntakeSpeed = 0.5; // Percent
+
+        // All this is taken from Shenanigans since I don't know exact values yet
+        public static final double kArmGearRatio = 180.0/1.0;
+        public static final double encoderOffset = Math.toRadians(224.45);
+        // Lowest safe rotation relative to encoderOffset 
+        public static final double minAngle = -Math.toRadians(125);
+        // Highest safe rotation relative to encoderOffset 
+        public static final double maxAngle = Math.toRadians(160);
+        public static final int kEncoderDIOPort = 0;
+        public static final int kCurrentLimit = 40;
+
+        // PID parameters - Taken from Shenanigans, need to retune
+        public static final double kP = 12;
+        public static final double kI = 0.0;
+        public static final double kD = 0.0;
+        // FeedForward parameters
+        // regression from F = kG cos Theta is 0.265
+        public static final double kS = 0.0;
+        public static final double kG = 0.16;
+        public static final double kV = 3.5;
+        public static final double kA = 0.01;
+        // Motion Profile
+        public static final double kMaxVel = 6;
+        public static final double kMaxAccel = 2;
+    }
 }

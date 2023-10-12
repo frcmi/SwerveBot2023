@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.util.PathPlannerLoader;
 import frc.robot.autos.*;
@@ -22,7 +23,7 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
     /* Controllers */
-    private final Joystick driver = new Joystick(0);
+    private final CommandXboxController driver = new CommandXboxController(0);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -30,13 +31,13 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton resetPositionButton = new JoystickButton(driver, XboxController.Button.kA.value);
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-
+    // private final JoystickButton resetPositionButton = new JoystickButton(driver, XboxController.Button.kA.value);
+    // private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
+    private final IntakeSubsystem m_Intake = new IntakeSubsystem();
+    private final ArmSubsystem m_Arm = new ArmSubsystem();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -47,7 +48,7 @@ public class RobotContainer {
                 () -> driver.getRawAxis(translationAxis), 
                 () -> driver.getRawAxis(strafeAxis), 
                 () -> driver.getRawAxis(rotationAxis), 
-                () -> robotCentric.getAsBoolean()
+                () -> driver.leftBumper().getAsBoolean()
             )
         );
 
@@ -63,9 +64,22 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        resetPositionButton.onTrue(new InstantCommand(s_Swerve::resetModulesToAbsolute));
+        driver.a().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        driver.y().onTrue(new InstantCommand(s_Swerve::resetModulesToAbsolute));
 
+        // Arm Buttons - Probably need to change these values
+        driver.povLeft().onTrue(m_Arm.moveTo(180));
+        driver.povUp().onTrue(m_Arm.moveTo(90));
+        driver.povRight().onTrue(m_Arm.moveTo(45));
+        driver.povDown().onTrue(m_Arm.moveTo(0));
+
+        // Intake
+        driver.rightTrigger()
+            .onTrue(m_Intake.intake())
+            .onFalse(m_Intake.stopCommand());
+        driver.leftTrigger()
+            .onTrue(m_Intake.reverseIntake())
+            .onFalse(m_Intake.stopCommand());
     }
 
     /**
