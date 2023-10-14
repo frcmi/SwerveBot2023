@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
@@ -14,7 +16,15 @@ public class IntakeSubsystem extends SubsystemBase {
     private final TalonFX rightMotor = new TalonFX(IntakeConstants.kRightMotorId);
     
     public IntakeSubsystem() {
-        leftMotor.follow(rightMotor);
+        leftMotor.setNeutralMode(NeutralMode.Coast);
+        rightMotor.follow(leftMotor);
+        rightMotor.setNeutralMode(NeutralMode.Coast);
+
+        //pidController.setGoal(getAngle());
+        //pidController.setTolerance(Math.toRadians(1.5));
+        // would be optimal to use PID as default to hold position
+        // but this lets us sway our arm for intaking cones
+        setDefaultCommand(stop());
     }
 
     @Override
@@ -25,30 +35,16 @@ public class IntakeSubsystem extends SubsystemBase {
         SmartDashboard.putString("Intake Command", currentCommand.getName());
     }
 
-    // Intake cone, release cube
-    public CommandBase intake() {
-        return setMotor(IntakeConstants.kIntakeSpeed)
-                // .until(this::motorOverCurrent)
-                // .andThen(Commands.waitSeconds(IntakeConstants.kIntakeTime))
-                // .andThen(stopCommand())
-                ;
+    public CommandBase intake(){
+        return run(() -> leftMotor.set(TalonFXControlMode.PercentOutput, IntakeConstants.kIntakeSpeed));
     }
 
-    private CommandBase setMotor(double speed) {
-        return Commands.run(() -> rightMotor.set(TalonFXControlMode.PercentOutput, speed), this);
+    public CommandBase outtake(){
+        return run(() -> leftMotor.set(TalonFXControlMode.PercentOutput, -IntakeConstants.kIntakeSpeed));
     }
 
-    // Release cone, intake cube
-    public CommandBase reverseIntake() {
-        return setMotor(IntakeConstants.kIntakeSpeed * -1)
-                // .until(this::motorOverCurrent)
-                // .andThen(Commands.waitSeconds(IntakeConstants.kIntakeTime))
-                // .andThen(stopCommand())
-                ;
-    }
-
-    public void stop() {
-        rightMotor.set(TalonFXControlMode.PercentOutput, 0);
+    public CommandBase stop() {
+        return run(() -> leftMotor.set(TalonFXControlMode.PercentOutput, 0));
     }
 
     public CommandBase stopCommand() {

@@ -64,22 +64,17 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        driver.a().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        driver.y().onTrue(new InstantCommand(s_Swerve::resetModulesToAbsolute));
+        driver.back().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        driver.start().onTrue(new InstantCommand(s_Swerve::resetModulesToAbsolute));
 
         // Arm Buttons - Probably need to change these values
-        driver.povLeft().onTrue(m_Arm.moveTo(180));
-        driver.povUp().onTrue(m_Arm.moveTo(90));
-        driver.povRight().onTrue(m_Arm.moveTo(45));
-        driver.povDown().onTrue(m_Arm.moveTo(0));
+        driver.povUp().whileTrue(m_Arm.wristUp());
+        driver.povDown().whileTrue(m_Arm.wristDown());
 
         // Intake
-        driver.rightTrigger()
-            .onTrue(m_Intake.intake())
-            .onFalse(m_Intake.stopCommand());
-        driver.leftTrigger()
-            .onTrue(m_Intake.reverseIntake())
-            .onFalse(m_Intake.stopCommand());
+        driver.rightTrigger().whileTrue(m_Intake.intake());
+        driver.leftTrigger().whileTrue(m_Intake.outtake());
+
     }
 
     /**

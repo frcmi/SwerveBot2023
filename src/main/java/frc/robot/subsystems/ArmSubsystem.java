@@ -15,11 +15,13 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ArmConstants;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import frc.robot.Constants.ArmConstants;
 public class ArmSubsystem extends SubsystemBase {
     private final TalonFX leftMotor = new TalonFX(ArmConstants.kLeftMotorId);
     private final TalonFX rightMotor = new TalonFX(ArmConstants.kRightMotorId);
@@ -34,33 +36,54 @@ public class ArmSubsystem extends SubsystemBase {
     double lastTime = Timer.getFPGATimestamp();
 
     public ArmSubsystem() {
-        leftMotor.setNeutralMode(NeutralMode.Brake);
-        leftMotor.setInverted(InvertType.FollowMaster);
+        leftMotor.setNeutralMode(NeutralMode.Coast);
+        rightMotor.setInverted(InvertType.FollowMaster);
         rightMotor.follow(leftMotor);
-        rightMotor.setNeutralMode(NeutralMode.Brake);
+        rightMotor.setNeutralMode(NeutralMode.Coast);
 
         encoder.setDistancePerPulse(1);
-        pidController.setGoal(getAngle());
-        pidController.setTolerance(Math.toRadians(1.5));
+        //pidController.setGoal(getAngle());
+        //pidController.setTolerance(Math.toRadians(1.5));
         // would be optimal to use PID as default to hold position
         // but this lets us sway our arm for intaking cones
         setDefaultCommand(stop());
     }
 
+    public CommandBase wristDown(){
+        return run(() -> leftMotor.set(TalonFXControlMode.PercentOutput, ArmConstants.kArmSpeed));
+    }
+
+    public CommandBase wristUp(){
+        return run(() -> leftMotor.set(TalonFXControlMode.PercentOutput, -ArmConstants.kArmSpeed));
+    }
+
+    public CommandBase stop() {
+        return run(() -> leftMotor.set(TalonFXControlMode.PercentOutput, 0));
+    }
+
     @Override
     public void periodic() {
-        // SmartDashboard.putNumber("Arm Radians", getAngle());
-        SmartDashboard.putNumber("Arm Degrees", Math.toDegrees(getAngle()));
+        //SmartDashboard.putNumber("Arm Radians", getAngle());
+        //SmartDashboard.putNumber("Wrist Degrees", Math.toDegrees(getAngle()));
+        SmartDashboard.putNumber("Wrist Current", leftMotor.getStatorCurrent());
+        var currentCommand = this.getCurrentCommand();
+        if (currentCommand != null){
+            SmartDashboard.putString("Wrist Command", currentCommand.getName());
+        } else {
+            SmartDashboard.putString("Wrist Command", "");
+        }
         // SmartDashboard.putNumber("Arm Encoder", absoluteEncoder.getAbsolutePosition());
         // SmartDashboard.putData("Arm PID", pidController);
         // SmartDashboard.putNumber("Arm PID Error Deg", Math.toDegrees(pidController.getPositionError()));
     }
 
+    /* 
+    
     private void setVolts(double percent) {
         double angle = getAngle();
         double kg = feedforward.calculate(angle, 0);
-        SmartDashboard.putNumber("Arm Percentage Input", percent);
-        SmartDashboard.putBoolean("Arm Bounds", !(angle > ArmConstants.maxAngle || angle < ArmConstants.minAngle));
+        //SmartDashboard.putNumber("Arm Percentage Input", percent);
+        //SmartDashboard.putBoolean("Arm Bounds", !(angle > ArmConstants.maxAngle || angle < ArmConstants.minAngle));
         // Stop movement if outside bounds
         if (angle < ArmConstants.minAngle) 
             percent = Math.max(kg, Math.min(2, percent));
@@ -81,21 +104,14 @@ public class ArmSubsystem extends SubsystemBase {
         double pidOutput = pidController.calculate(getAngle(), goalAngle);
         State setpoint = pidController.getSetpoint();
         double ffOutpout = feedforward.calculate(setpoint.position, setpoint.velocity);
-        SmartDashboard.putNumber("Arm FF Out", ffOutpout);
-        SmartDashboard.putNumber("Arm PID Out", pidOutput);
-        SmartDashboard.putNumber("Arm Goal Volts", pidOutput + ffOutpout);
+        //SmartDashboard.putNumber("Arm FF Out", ffOutpout);
+        //SmartDashboard.putNumber("Arm PID Out", pidOutput);
+        //SmartDashboard.putNumber("Arm Goal Volts", pidOutput + ffOutpout);
         setVolts(pidOutput + ffOutpout);  
-    }
-      
-    public CommandBase stop() {
-        return run(() -> {
-            double angle = getAngle();
-            pidController.reset(angle);
-            setVolts(feedforward.calculate(angle, 0));
-        });
     }
 
     public CommandBase moveTo(double angle) {
         return run(() -> setAngle(angle)).until(pidController::atGoal);
     }
+    */
 }

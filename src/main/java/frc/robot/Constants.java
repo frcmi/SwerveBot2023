@@ -90,44 +90,41 @@ public final class Constants {
 
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
-        public static final class Mod1 { //TODO: This must be tuned to specific robot
+        public static final class Mod0 {
             public static final int driveMotorID = 2;
             public static final int angleMotorID = 6;
-            public static final int canCoderID = 12;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(127);
-            public static final SwerveModuleConstants constants =
+            public static final int canCoderID = 11;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(108.07); 
+            public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
-        }
-
+        }  
         /* Front Right Module - Module 1 */
-        public static final class Mod3 { //TODO: This must be tuned to specific robot
-            public static final int driveMotorID = 4;
-            public static final int angleMotorID = 8;
-            public static final int canCoderID = 14;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(50);
+        public static final class Mod1 { 
+            public static final int driveMotorID = 1;
+            public static final int angleMotorID = 5;
+            public static final int canCoderID = 12;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(126.30);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
         
         /* Back Left Module - Module 2 */
-        public static final class Mod2 { //TODO: This must be tuned to specific robot
+        public static final class Mod2 { 
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 7;
             public static final int canCoderID = 13;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(60); /* this number should be 200deg but 
-             at 200 deg the wheel does not rotate back to the forward position(returns to 268deg ).
-              but when the offset is this number */
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(61.35);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
 
         /* Back Right Module - Module 3 */
-        public static final class Mod0 { //TODO: This must be tuned to specific robot
-            public static final int driveMotorID = 1;
-            public static final int angleMotorID = 5;
-            public static final int canCoderID = 11;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(109);
-            public static final SwerveModuleConstants constants = 
+        public static final class Mod3 { 
+            public static final int driveMotorID = 4;
+            public static final int angleMotorID = 8;
+            public static final int canCoderID = 14;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(48.69);
+            public static final SwerveModuleConstants constants =
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
     }
@@ -149,24 +146,24 @@ public final class Constants {
     }
 
     public static final class IntakeConstants {
-        public static final int kLeftMotorId = 0; // Need to change
-        public static final int kRightMotorId = 0; // Need to change
+        public static final int kLeftMotorId = 16; // Need to change
+        public static final int kRightMotorId = 17; // Need to change
         public static final double kIntakeSpeed = 0.5; // Percent
 
     }
 
     public static final class ArmConstants {
-        public static final int kLeftMotorId = 0; // Need to change
-        public static final int kRightMotorId = 0; // Need to change
-        public static final double kIntakeSpeed = 0.5; // Percent
+        public static final int kLeftMotorId = 18; // Need to change
+        public static final int kRightMotorId = 19; // Need to change
+        public static final double kArmSpeed = 0.8; // Percent
 
         // All this is taken from Shenanigans since I don't know exact values yet
-        public static final double kArmGearRatio = 180.0/1.0;
-        public static final double encoderOffset = Math.toRadians(224.45);
+        public static final double kArmGearRatio = 36.0/1.0;
+        public static final double encoderOffset = Math.toRadians(0);
         // Lowest safe rotation relative to encoderOffset 
-        public static final double minAngle = -Math.toRadians(125);
+        public static final double minAngle = Math.toRadians(0);
         // Highest safe rotation relative to encoderOffset 
-        public static final double maxAngle = Math.toRadians(160);
+        public static final double maxAngle = Math.toRadians(210);
         public static final int kEncoderDIOPort = 0;
         public static final int kCurrentLimit = 40;
 
