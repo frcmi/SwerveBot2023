@@ -16,9 +16,6 @@ import frc.robot.subsystems.Swerve;
 
 public class PathPlannerLoader {
     public static SwerveAutoBuilder autoBuilder;
-    public PathPlannerLoader() {
-        System.out.println("you dont need to initialize this i think");
-    }
 
     public static CommandBase LoadAutoFromString(Swerve dt, String name, PathConstraints constraints, HashMap<String, Command> eventMap) {
         PathPlannerTrajectory path = PathPlanner.loadPath(name, constraints);

@@ -36,10 +36,10 @@ public class ArmSubsystem extends SubsystemBase {
     double lastTime = Timer.getFPGATimestamp();
 
     public ArmSubsystem() {
-        leftMotor.setNeutralMode(NeutralMode.Coast);
+        leftMotor.setNeutralMode(NeutralMode.Brake);
         rightMotor.setInverted(InvertType.FollowMaster);
         rightMotor.follow(leftMotor);
-        rightMotor.setNeutralMode(NeutralMode.Coast);
+        rightMotor.setNeutralMode(NeutralMode.Brake);
 
         encoder.setDistancePerPulse(1);
         //pidController.setGoal(getAngle());
@@ -48,6 +48,10 @@ public class ArmSubsystem extends SubsystemBase {
         // but this lets us sway our arm for intaking cones
         setDefaultCommand(stop());
     }
+
+    public CommandBase wristStow(){
+        return run(() -> leftMotor.set(TalonFXControlMode.PercentOutput, -0.3));
+    } 
 
     public CommandBase wristDown(){
         return run(() -> leftMotor.set(TalonFXControlMode.PercentOutput, ArmConstants.kArmSpeed));

@@ -104,13 +104,13 @@ public class SwerveModule {
         mDriveMotor.setSelectedSensorPosition(0);
     }
 
-    public void setBrakeMode(boolean brake){   
+    /*public void setBrakeMode(boolean brake){   
         if (brake = false){
             mDriveMotor.setNeutralMode(Constants.Swerve.driveNeutralMode);
         } else {
             mDriveMotor.setNeutralMode(NeutralMode.Brake);
         }
-    }
+    }*/
 
     public SwerveModuleState getState(){
         return new SwerveModuleState(

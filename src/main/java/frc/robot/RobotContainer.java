@@ -7,7 +7,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandGroupBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.util.PathPlannerLoader;
@@ -52,6 +54,8 @@ public class RobotContainer {
             )
         );
 
+        //m_Arm.setDefaultCommand(m_Arm.wristStow());
+
         // Configure the button bindings
         configureButtonBindings();
     }
@@ -65,14 +69,15 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         driver.back().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        driver.start().onTrue(new InstantCommand(s_Swerve::resetModulesToAbsolute));
+        //driver.start().onTrue(new InstantCommand(s_Swerve::resetModulesToAbsolute));
 
         // Arm Buttons - Probably need to change these values
         driver.povUp().whileTrue(m_Arm.wristUp());
         driver.povDown().whileTrue(m_Arm.wristDown());
 
         // Intake
-        driver.rightTrigger().whileTrue(m_Intake.intake());
+        driver.rightTrigger().whileTrue(m_Arm.wristDown()).whileTrue(m_Intake.intake());
+        //driver.rightTrigger().whileTrue(m_Intake.intake());
         driver.leftTrigger().whileTrue(m_Intake.outtake());
 
     }
@@ -83,6 +88,10 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return PathPlannerLoader.LoadAutoFromString(s_Swerve, "Path1", new PathConstraints(1, 0.5), new HashMap<>());
+        //return PathPlannerLoader.LoadAutoFromString(s_Swerve, "Path1", new PathConstraints(1, 0.5), new HashMap<>());
+        // if(true)
+        // throw new RuntimeException("HI");
+
+        return (m_Intake.outtake().withTimeout(.5).andThen(PathPlannerLoader.LoadAutoFromString(s_Swerve, "Blue 1 auto", new PathConstraints(1, 0.5), new HashMap<>())));
     }
 }

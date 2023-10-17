@@ -54,13 +54,13 @@ public class Swerve extends SubsystemBase {
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
     }
 
-    public void setBrakeMode(boolean brake){
+    /*public void setBrakeMode(boolean brake){
         for(SwerveModule mod : mSwerveMods){
             mod.setBrakeMode(brake);
         }
-    }
+    }*/
 
-    public CommandBase balanceCommand() {
+    /*public CommandBase balanceCommand() {
         CommandBase command = run(() -> {
           double pitchAngleRadians = gyro.getRoll() * (Math.PI / 28.0);
           double xAxisRate = Math.sin(pitchAngleRadians) * -1.05;
@@ -71,7 +71,7 @@ public class Swerve extends SubsystemBase {
           // .until(() -> Math.abs(getRoll()) < 3);
         command.setName("Balance");
         return runOnce(() -> setBrakeMode(true)).andThen(command);
-      }
+      }*/
 
     /*public void lockSwerve(){
         for(SwerveModule mod : mSwerveMods){
