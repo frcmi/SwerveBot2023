@@ -11,9 +11,8 @@ import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
-    public static final double stickDeadband = 0.1;
-
-    public static final class Swerve {
+    public static final class SwerveConstants {
+        public static final double stickDeadband = 0.1;
         public static final int pigeonID = 0;
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
 
@@ -148,7 +147,7 @@ public final class Constants {
     public static final class IntakeConstants {
         public static final int kLeftMotorId = 16; // Need to change
         public static final int kRightMotorId = 17; // Need to change
-        public static final double kIntakeSpeed = 0.5; // Percent
+        public static final double kIntakeSpeed = 1; // Percent
 
     }
 
@@ -156,29 +155,6 @@ public final class Constants {
         public static final int kLeftMotorId = 18; // Need to change
         public static final int kRightMotorId = 19; // Need to change
         public static final double kArmSpeed = 0.8; // Percent
-
-        // All this is taken from Shenanigans since I don't know exact values yet
-        public static final double kArmGearRatio = 36.0/1.0;
-        public static final double encoderOffset = Math.toRadians(0);
-        // Lowest safe rotation relative to encoderOffset 
-        public static final double minAngle = Math.toRadians(0);
-        // Highest safe rotation relative to encoderOffset 
-        public static final double maxAngle = Math.toRadians(210);
-        public static final int kEncoderDIOPort = 0;
         public static final int kCurrentLimit = 40;
-
-        // PID parameters - Taken from Shenanigans, need to retune
-        public static final double kP = 12;
-        public static final double kI = 0.0;
-        public static final double kD = 0.0;
-        // FeedForward parameters
-        // regression from F = kG cos Theta is 0.265
-        public static final double kS = 0.0;
-        public static final double kG = 0.16;
-        public static final double kV = 3.5;
-        public static final double kA = 0.01;
-        // Motion Profile
-        public static final double kMaxVel = 6;
-        public static final double kMaxAccel = 2;
     }
 }
