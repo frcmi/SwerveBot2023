@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.SwerveModule;
 
@@ -29,6 +28,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
+    private PIDController balanceController;
 
     public SwerveSubsystem() {
         gyro = new Pigeon2(SwerveConstants.pigeonID);
@@ -48,6 +48,8 @@ public class SwerveSubsystem extends SubsystemBase {
         Timer.delay(1.0);
         resetModulesToAbsolute();
 
+        balanceController = new PIDController(.048, 0.0001, 0.01);
+
         swerveOdometry = new SwerveDriveOdometry(SwerveConstants.swerveKinematics, getYaw(), getModulePositions());
     }
 
@@ -57,28 +59,12 @@ public class SwerveSubsystem extends SubsystemBase {
         }
     }
 
-    public CommandBase balanceCommand() {
-        CommandBase command = run(() -> {
-          double pitchAngleRadians = gyro.getRoll() * (Math.PI / 28.0);
-          double xAxisRate = Math.sin(pitchAngleRadians) * -1.05;
-          // double xAxisRate = Math.pow(pitchAngleRadians, 3) / 100;
-          SmartDashboard.putNumber("Balance Power", xAxisRate);
-          drive(null, xAxisRate, false, false);
-        }).withTimeout(8);
-          // .until(() -> Math.abs(getRoll()) < 3);
-        command.setName("Balance");
-        return runOnce(() -> setBrakeMode(true)).andThen(command);
-      }
-
-    /*public void lockSwerve(){
-        for(SwerveModule mod : mSwerveMods){
-            mod.setBrakeMode(brake);
-        }
-        m_frontLeftModule.set(0, 45);
-        m_frontRightModule.set(0, -45);
-        m_backRightModule.set(0, 45);
-        this.setBrakeMode(true);
-    }*/
+    public Command balanceRobot() {
+        System.out.println("Balancing");
+        return this.run(() -> {
+            drive(new Translation2d(balanceController.calculate(getPitch(),0),0),0, false, true);
+        }).until(() -> getPitch() < .1 && getPitch() > -.1).andThen(() -> System.out.println("Finished Balacing"));
+    }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         SwerveModuleState[] swerveModuleStates =
@@ -138,8 +124,16 @@ public class SwerveSubsystem extends SubsystemBase {
         gyro.setYaw(0);
     }
 
+    public void teleopGyro(){
+        gyro.setYaw(180);
+    }
+
     public Rotation2d getYaw() {
         return (SwerveConstants.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
+    }
+
+    public double getPitch() {
+        return gyro.getPitch();
     }
 
     public void resetModulesToAbsolute(){
@@ -147,6 +141,18 @@ public class SwerveSubsystem extends SubsystemBase {
             mod.resetToAbsolute();
         }
     }
+
+    public Command lockWheels() {
+        return this.run(() -> {
+            SwerveModuleState[] desiredState = {
+                new SwerveModuleState(0, new Rotation2d(Math.PI / 4)),
+                new SwerveModuleState(0, new Rotation2d(-Math.PI / 4)),
+                new SwerveModuleState(0, new Rotation2d(-Math.PI / 4)),
+                new SwerveModuleState(0, new Rotation2d(Math.PI / 4))
+            };
+            setModuleStates(desiredState);
+        });
+    }  
 
     @Override
     public void periodic(){

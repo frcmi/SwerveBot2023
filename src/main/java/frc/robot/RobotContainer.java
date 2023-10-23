@@ -4,13 +4,11 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import java.util.HashMap;
 import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.util.PathPlannerLoader;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
@@ -63,10 +61,11 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
+
     private void configureButtonBindings() {
         /* Driver Buttons */
         driver.back().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        //driver.start().onTrue(new InstantCommand(s_Swerve::resetModulesToAbsolute));
+        driver.start().onTrue(new InstantCommand(() -> s_Swerve.teleopGyro()));
 
         // Intake
         driver.rightTrigger().whileTrue(Commands.parallel(s_Intake.intake(), s_Arm.wristDown()));
