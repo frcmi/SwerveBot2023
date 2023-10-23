@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -7,39 +8,43 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 
 
-public class TeleopSwerve extends CommandBase {    
+public class HeadingCorrectionDrive extends CommandBase {    
     private SwerveSubsystem s_Swerve;    
+    private double heading;
+    private PIDController headingController;
     private DoubleSupplier translationSup;
     private DoubleSupplier strafeSup;
-    private DoubleSupplier rotationSup;
-    private BooleanSupplier robotCentricSup;
 
-    public TeleopSwerve(SwerveSubsystem s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
+    public HeadingCorrectionDrive(SwerveSubsystem s_Swerve, double heading, DoubleSupplier translationSup, DoubleSupplier strafeSup) {
         this.s_Swerve = s_Swerve;
         addRequirements(s_Swerve);
 
         this.translationSup = translationSup;
         this.strafeSup = strafeSup;
-        this.rotationSup = rotationSup;
-        this.robotCentricSup = robotCentricSup;
+
+        this.heading = heading;
+        headingController = new PIDController(.05, 0, 0);
     }
 
     @Override
     public void execute() {
-        /* Get Values, Deadband*/
+        
+        /* Drive */
+        //s_Swerve.drive(new Translation2d(3,0), headingController.calculate(s_Swerve.getYaw().getDegrees(), heading), false, false);
+        
         double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), SwerveConstants.stickDeadband);
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), SwerveConstants.stickDeadband);
-        double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), SwerveConstants.stickDeadband);
 
-        /* Drive */
         s_Swerve.drive(
             new Translation2d(translationVal, strafeVal).times(SwerveConstants.maxSpeed), 
-            rotationVal * SwerveConstants.maxAngularVelocity, 
-            !robotCentricSup.getAsBoolean(), 
+            headingController.calculate(s_Swerve.getYaw().getDegrees(), heading), 
+            false, 
             true
         );
     }

@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -35,9 +36,9 @@ public class RobotContainer {
     // private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
 
     /* Subsystems */
-    private final Swerve s_Swerve = new Swerve();
-    private final IntakeSubsystem m_Intake = new IntakeSubsystem();
-    private final ArmSubsystem m_Arm = new ArmSubsystem();
+    private final SwerveSubsystem s_Swerve = new SwerveSubsystem();
+    private final IntakeSubsystem s_Intake = new IntakeSubsystem();
+    private final ArmSubsystem s_Arm = new ArmSubsystem();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -65,15 +66,25 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         driver.back().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        driver.start().onTrue(new InstantCommand(s_Swerve::resetModulesToAbsolute));
-
-        // Arm Buttons - Probably need to change these values
-        driver.povUp().whileTrue(m_Arm.wristUp());
-        driver.povDown().whileTrue(m_Arm.wristDown());
+        //driver.start().onTrue(new InstantCommand(s_Swerve::resetModulesToAbsolute));
 
         // Intake
-        driver.rightTrigger().whileTrue(m_Intake.intake());
-        driver.leftTrigger().whileTrue(m_Intake.outtake());
+        driver.rightTrigger().whileTrue(Commands.parallel(s_Intake.intake(), s_Arm.wristDown()));
+        driver.leftTrigger().whileTrue(s_Intake.l1Shoot());
+
+        //Shoot
+        driver.a().whileTrue(s_Intake.l1Shoot());
+        driver.b().whileTrue(s_Intake.l2Shoot());
+        driver.x().whileTrue(s_Intake.l2Shoot());
+        driver.y().whileTrue(s_Intake.l3Shoot());
+
+        //TODO: Bumpers rotate while translate
+        driver.leftBumper().onTrue(new HeadingCorrectionDrive(
+            s_Swerve, 
+            180.00,
+            () -> driver.getRawAxis(translationAxis), 
+            () -> driver.getRawAxis(strafeAxis)
+        ));
 
     }
 

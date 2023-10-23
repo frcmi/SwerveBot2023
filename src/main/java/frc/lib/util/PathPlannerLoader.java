@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.SwerveSubsystem;
 
 public class PathPlannerLoader {
     public static SwerveAutoBuilder autoBuilder;
@@ -20,7 +20,7 @@ public class PathPlannerLoader {
         System.out.println("you dont need to initialize this i think");
     }
 
-    public static CommandBase LoadAutoFromString(Swerve dt, String name, PathConstraints constraints, HashMap<String, Command> eventMap) {
+    public static CommandBase LoadAutoFromString(SwerveSubsystem dt, String name, PathConstraints constraints, HashMap<String, Command> eventMap) {
         PathPlannerTrajectory path = PathPlanner.loadPath(name, constraints);
         
         if (autoBuilder.equals(null)) {

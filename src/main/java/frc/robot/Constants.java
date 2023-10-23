@@ -145,10 +145,17 @@ public final class Constants {
     }
 
     public static final class IntakeConstants {
-        public static final int kLeftMotorId = 16; // Need to change
-        public static final int kRightMotorId = 17; // Need to change
-        public static final double kIntakeSpeed = 1; // Percent
+        public static final int kBottomMotorId = 16; // Need to change
+        public static final int kTopMotorId = 17; // Need to change
+        public static final double kIntakeSpeed = .5; // Percent
+        public static final double kHoldVolts = 0.3;
 
+        public static final double kLowBottomPercent = 0.3;
+        public static final double kLowTopPercent = 0.3;
+        public static final double kMidBottomPercent = 0.3;
+        public static final double kMidTopPercent = 0.3;
+        public static final double kHighBottomPercent = 0.3;
+        public static final double kHighTopPercent = 0.3;
     }
 
     public static final class ArmConstants {
@@ -156,5 +163,6 @@ public final class Constants {
         public static final int kRightMotorId = 19; // Need to change
         public static final double kArmSpeed = 0.8; // Percent
         public static final int kCurrentLimit = 40;
+        public static final double kStowVolts = 0.3;
     }
 }

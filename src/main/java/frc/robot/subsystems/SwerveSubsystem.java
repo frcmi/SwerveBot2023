@@ -25,12 +25,12 @@ import frc.robot.Constants.SwerveConstants;
 import frc.robot.SwerveModule;
 
 
-public class Swerve extends SubsystemBase {
+public class SwerveSubsystem extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
 
-    public Swerve() {
+    public SwerveSubsystem() {
         gyro = new Pigeon2(SwerveConstants.pigeonID);
         gyro.configFactoryDefault();
         zeroGyro();
