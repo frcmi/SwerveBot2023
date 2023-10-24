@@ -51,23 +51,6 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        var currentCommand = this.getCurrentCommand();
-        if (currentCommand != null){
-            Shuffleboard.getTab("Arm")
-            .add("Wrist Command", currentCommand.getName());
-        } else {
-            Shuffleboard.getTab("Arm")
-            .add("Wrist Command", "");
-        }
-
-        Shuffleboard.getTab("Arm")
-            .add("Stow Volts", StowVolts)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", -12, "max", 12)) // specify the widget here
-            .getEntry();
-
-        Shuffleboard.getTab("Arm")
-            .add("Wrist Current", leftMotor.getStatorCurrent());
-
+    
     }
 }
