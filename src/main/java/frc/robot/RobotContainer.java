@@ -29,10 +29,6 @@ public class RobotContainer {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-    /* Driver Buttons */
-    // private final JoystickButton resetPositionButton = new JoystickButton(driver, XboxController.Button.kA.value);
-    // private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-
     /* Subsystems */
     private final SwerveSubsystem s_Swerve = new SwerveSubsystem();
     private final IntakeSubsystem s_Intake = new IntakeSubsystem();
@@ -63,24 +59,10 @@ public class RobotContainer {
      */
 
     private void configureButtonBindings() {
-        /* Driver Buttons */
+        /* Drivetrain*/
         driver.back().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         driver.start().onTrue(new InstantCommand(() -> s_Swerve.teleopGyro()));
-
-        driver.povUp().whileTrue(s_Arm.wristUp());
-        driver.povDown().whileTrue(s_Arm.wristDown());
-
-        // Intake
-        driver.rightTrigger().whileTrue(Commands.parallel(s_Intake.intake(), s_Arm.wristDown()));
-        driver.leftTrigger().whileTrue(s_Intake.l1Shoot());
-
-        //Shoot
-        driver.a().whileTrue(s_Intake.l1Shoot());
-        driver.b().whileTrue(s_Intake.l2Shoot());
-        driver.x().whileTrue(s_Intake.l2Shoot());
-        driver.y().whileTrue(s_Intake.l3Shoot());
-
-        //TODO: Bumpers rotate while translate
+        
         driver.leftBumper().onTrue(new HeadingCorrectionDrive(
             s_Swerve, 
             180.00,
@@ -88,6 +70,18 @@ public class RobotContainer {
             () -> driver.getRawAxis(strafeAxis)
         ));
 
+        // Arm
+        driver.povUp().whileTrue(s_Arm.wristUp());
+        driver.povDown().whileTrue(s_Arm.wristDown());
+
+        // Intake
+        driver.rightTrigger().whileTrue(Commands.parallel(s_Intake.intake(), s_Arm.wristDown()));
+        driver.leftTrigger().whileTrue(s_Intake.l1Shoot());
+
+        driver.a().whileTrue(s_Intake.l1Shoot());
+        driver.b().whileTrue(s_Intake.l2Shoot());
+        driver.x().whileTrue(s_Intake.l2Shoot());
+        driver.y().whileTrue(s_Intake.l3Shoot());
     }
 
     /**

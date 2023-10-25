@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -23,10 +24,12 @@ public class IntakeSubsystem extends SubsystemBase {
     
     public IntakeSubsystem() {
         topMotor.setNeutralMode(NeutralMode.Coast);
-        
         bottomMotor.setNeutralMode(NeutralMode.Coast);
-        // bottomMotor.setInverted(true);
-        
+        // bottomMotor.setInverted(true); not needed since inverted values is good and inversion by flip
+
+        topMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40.0, 60.0, 0.1));
+        bottomMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40.0, 60.0, 0.1));
+
         setDefaultCommand(hold());
     }
 
@@ -42,37 +45,37 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public CommandBase intake(){
         return run(
-                () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, IntakeConstants.kIntakeSpeed);
-                       topMotor.set(TalonFXControlMode.PercentOutput, IntakeConstants.kIntakeSpeed);}
-        );
+                () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, IntakeConstants.kIntakePercent);
+                       topMotor.set(TalonFXControlMode.PercentOutput, IntakeConstants.kIntakePercent);}
+        ).withName("Intake");
     }
 
     public CommandBase l1Shoot(){
         return run(
                 () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, -IntakeConstants.kLowBottomPercent);
                        topMotor.set(TalonFXControlMode.PercentOutput, -IntakeConstants.kLowTopPercent);}
-        );
+        ).withName("L1 Shoot");
     }
 
     public CommandBase l2Shoot(){
         return run(
                 () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, -IntakeConstants.kMidBottomPercent);
                        topMotor.set(TalonFXControlMode.PercentOutput, -IntakeConstants.kMidTopPercent);}
-        );
+        ).withName("L2 Shoot");
     }
 
     public CommandBase l3Shoot(){
        return run(
                 () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, -IntakeConstants.kMidBottomPercent);
                        topMotor.set(TalonFXControlMode.PercentOutput, -IntakeConstants.kMidTopPercent);}
-        );
+        ).withName("L3 Shoot");
     }
 
     public CommandBase hold() {
         return run(
-            () -> {bottomMotor.setVoltage(IntakeConstants.kHoldVolts);
-                   topMotor.setVoltage(IntakeConstants.kHoldVolts);}
-        );
+            () -> {bottomMotor.set(TalonFXControlMode.Current, IntakeConstants.kHoldAmps);
+                   topMotor.set(TalonFXControlMode.Current, IntakeConstants.kHoldAmps);}
+        ).withName("Hold");
     }
 
     /*public CommandBase stop() {
