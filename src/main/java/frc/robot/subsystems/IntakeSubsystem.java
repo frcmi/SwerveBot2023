@@ -18,10 +18,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
-    double bottomPercent = 0;
-    double topPercent = 0;
-    double holdVolts = 0;
-
     private final WPI_TalonFX topMotor = new WPI_TalonFX(IntakeConstants.kTopMotorId);
     private final WPI_TalonFX bottomMotor = new WPI_TalonFX(IntakeConstants.kBottomMotorId);
     
@@ -29,7 +25,7 @@ public class IntakeSubsystem extends SubsystemBase {
         topMotor.setNeutralMode(NeutralMode.Coast);
         
         bottomMotor.setNeutralMode(NeutralMode.Coast);
-        bottomMotor.setInverted(true);
+        // bottomMotor.setInverted(true);
         
         setDefaultCommand(hold());
     }
@@ -76,8 +72,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public CommandBase hold() {
         return this.runOnce(
-            () -> {bottomMotor.setVoltage(holdVolts);
-                   topMotor.setVoltage(holdVolts);}
+            () -> {bottomMotor.setVoltage(IntakeConstants.kHoldVolts);
+                   topMotor.setVoltage(IntakeConstants.kHoldVolts);}
         );
     }
 

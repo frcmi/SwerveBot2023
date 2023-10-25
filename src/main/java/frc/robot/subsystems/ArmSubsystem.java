@@ -14,13 +14,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.ArmConstants;
 public class ArmSubsystem extends SubsystemBase {
-    double StowVolts = 0;
-
     private final WPI_TalonFX leftMotor = new WPI_TalonFX(ArmConstants.kLeftMotorId);
     private final WPI_TalonFX rightMotor = new WPI_TalonFX(ArmConstants.kRightMotorId);
 
     public ArmSubsystem() {
         leftMotor.setNeutralMode(NeutralMode.Coast);
+        leftMotor.setInverted(true);
         rightMotor.setInverted(InvertType.FollowMaster);
         rightMotor.follow(leftMotor);
         rightMotor.setNeutralMode(NeutralMode.Coast);
@@ -30,13 +29,13 @@ public class ArmSubsystem extends SubsystemBase {
     public CommandBase wristDown(){
         rightMotor.setNeutralMode(NeutralMode.Coast);
         leftMotor.setNeutralMode(NeutralMode.Coast);
-        return run(() -> leftMotor.set(TalonFXControlMode.PercentOutput, ArmConstants.kArmSpeed));
+        return run(() -> leftMotor.set(TalonFXControlMode.PercentOutput, ArmConstants.kArmDownSpeed));
     }
 
     public CommandBase wristUp(){
         rightMotor.setNeutralMode(NeutralMode.Brake);
         leftMotor.setNeutralMode(NeutralMode.Brake);
-        return run(() -> leftMotor.set(TalonFXControlMode.PercentOutput, -ArmConstants.kArmSpeed));
+        return run(() -> leftMotor.set(TalonFXControlMode.PercentOutput, -ArmConstants.kArmUpSpeed));
     }
 
     public CommandBase stop() {
@@ -46,7 +45,7 @@ public class ArmSubsystem extends SubsystemBase {
     public CommandBase stow(){
         rightMotor.setNeutralMode(NeutralMode.Brake);
         leftMotor.setNeutralMode(NeutralMode.Brake);
-        return run(() -> leftMotor.setVoltage(StowVolts)); 
+        return run(() -> leftMotor.setVoltage(ArmConstants.kStowVolts)); 
     }
 
     @Override

@@ -67,6 +67,9 @@ public class RobotContainer {
         driver.back().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         driver.start().onTrue(new InstantCommand(() -> s_Swerve.teleopGyro()));
 
+        driver.povUp().whileTrue(s_Arm.wristUp());
+        driver.povDown().whileTrue(s_Arm.wristDown());
+
         // Intake
         driver.rightTrigger().whileTrue(Commands.parallel(s_Intake.intake(), s_Arm.wristDown()));
         driver.leftTrigger().whileTrue(s_Intake.l1Shoot());
