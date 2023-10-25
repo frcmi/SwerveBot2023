@@ -150,8 +150,8 @@ public final class Constants {
         public static final double kIntakeSpeed = 0.2; // Percent
         public static final double kHoldVolts = 1;
 
-        public static final double kLowBottomPercent = 0.5;
-        public static final double kLowTopPercent = 0.5;
+        public static final double kLowBottomPercent = 0.2;
+        public static final double kLowTopPercent = 0.2;
         public static final double kMidBottomPercent = 0.3;
         public static final double kMidTopPercent = 0.3;
         public static final double kHighBottomPercent = 0.3;

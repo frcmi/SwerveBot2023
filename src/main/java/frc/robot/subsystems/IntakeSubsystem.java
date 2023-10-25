@@ -32,52 +32,57 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-
+        var currentCommand = this.getCurrentCommand();
+        if (currentCommand != null){
+            SmartDashboard.putString("Arm Command", currentCommand.getName());
+        } else {
+            SmartDashboard.putString("Arm Command", "");
+        }
     }
 
     public CommandBase intake(){
-        return this.runOnce(
+        return run(
                 () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, IntakeConstants.kIntakeSpeed);
                        topMotor.set(TalonFXControlMode.PercentOutput, IntakeConstants.kIntakeSpeed);}
         );
     }
 
     public CommandBase l1Shoot(){
-        return this.runOnce(
-                () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, IntakeConstants.kLowBottomPercent);
-                       topMotor.set(TalonFXControlMode.PercentOutput, IntakeConstants.kLowTopPercent);}
+        return run(
+                () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, -IntakeConstants.kLowBottomPercent);
+                       topMotor.set(TalonFXControlMode.PercentOutput, -IntakeConstants.kLowTopPercent);}
         );
     }
 
     public CommandBase l2Shoot(){
-        return this.runOnce(
-                () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, IntakeConstants.kMidBottomPercent);
-                       topMotor.set(TalonFXControlMode.PercentOutput, IntakeConstants.kMidTopPercent);}
+        return run(
+                () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, -IntakeConstants.kMidBottomPercent);
+                       topMotor.set(TalonFXControlMode.PercentOutput, -IntakeConstants.kMidTopPercent);}
         );
     }
 
     public CommandBase l3Shoot(){
-       return this.runOnce(
-                () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, IntakeConstants.kMidBottomPercent);
-                       topMotor.set(TalonFXControlMode.PercentOutput, IntakeConstants.kMidTopPercent);}
-        );
-    }
-
-    public CommandBase stop() {
-        return this.runOnce(
-            () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, 0);
-                   topMotor.set(TalonFXControlMode.PercentOutput, 0);}
+       return run(
+                () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, -IntakeConstants.kMidBottomPercent);
+                       topMotor.set(TalonFXControlMode.PercentOutput, -IntakeConstants.kMidTopPercent);}
         );
     }
 
     public CommandBase hold() {
-        return this.runOnce(
+        return run(
             () -> {bottomMotor.setVoltage(IntakeConstants.kHoldVolts);
                    topMotor.setVoltage(IntakeConstants.kHoldVolts);}
         );
     }
 
+    /*public CommandBase stop() {
+        return this.runOnce(
+            () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, 0);
+                   topMotor.set(TalonFXControlMode.PercentOutput, 0);}
+        );
+    }
+    
     public CommandBase stopCommand() {
         return runOnce(this::stop);
-    }
+    }*/
 }
