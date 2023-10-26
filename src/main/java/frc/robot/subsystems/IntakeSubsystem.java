@@ -52,8 +52,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public CommandBase l1Shoot(){
         return run(
-                () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, -IntakeConstants.kLowBottomPercent);
-                       topMotor.set(TalonFXControlMode.PercentOutput, -IntakeConstants.kLowTopPercent);}
+                () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, -.2);
+                       topMotor.set(TalonFXControlMode.PercentOutput, -.2);}
         ).withName("L1 Shoot");
     }
 
@@ -66,15 +66,15 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public CommandBase l3Shoot(){
        return run(
-                () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, -IntakeConstants.kMidBottomPercent);
-                       topMotor.set(TalonFXControlMode.PercentOutput, -IntakeConstants.kMidTopPercent);}
+                () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, -1);
+                       topMotor.set(TalonFXControlMode.PercentOutput,-.9);}
         ).withName("L3 Shoot");
     }
 
     public CommandBase hold() {
         return run(
-            () -> {bottomMotor.set(TalonFXControlMode.Current, IntakeConstants.kHoldAmps);
-                   topMotor.set(TalonFXControlMode.Current, IntakeConstants.kHoldAmps);}
+            () -> {bottomMotor.setVoltage(IntakeConstants.kHoldVolts);
+                   topMotor.setVoltage(IntakeConstants.kHoldVolts);}
         ).withName("Hold");
     }
 

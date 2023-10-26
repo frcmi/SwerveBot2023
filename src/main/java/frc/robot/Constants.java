@@ -90,19 +90,19 @@ public final class Constants {
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
         public static final class Mod0 {
-            public static final int driveMotorID = 2;
-            public static final int angleMotorID = 6;
+            public static final int driveMotorID = 1;
+            public static final int angleMotorID = 5;
             public static final int canCoderID = 11;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(108.07); 
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(329.59); 
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }  
         /* Front Right Module - Module 1 */
         public static final class Mod1 { 
-            public static final int driveMotorID = 1;
-            public static final int angleMotorID = 5;
+            public static final int driveMotorID = 2;
+            public static final int angleMotorID = 6;
             public static final int canCoderID = 12;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(126.30);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(136.93);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -112,7 +112,7 @@ public final class Constants {
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 7;
             public static final int canCoderID = 13;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(61.35);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(126.83);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -122,7 +122,7 @@ public final class Constants {
             public static final int driveMotorID = 4;
             public static final int angleMotorID = 8;
             public static final int canCoderID = 14;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(48.69);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(110.65);
             public static final SwerveModuleConstants constants =
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -149,15 +149,15 @@ public final class Constants {
         public static final int kTopMotorId = 16; // default: 17
 
         public static final int kCurrentLimit = 40;
-        public static final double kHoldAmps = 1;
+        public static final double kHoldVolts = 1;
 
         public static final double kIntakePercent = 0.2; // Percent
-        public static final double kLowBottomPercent = 0.2;
-        public static final double kLowTopPercent = 0.2;
-        public static final double kMidBottomPercent = 0.3;
-        public static final double kMidTopPercent = 0.3;
-        public static final double kHighBottomPercent = 0.3;
-        public static final double kHighTopPercent = 0.3;
+        public static final double kLowBottomVolts = 2.5;
+        public static final double kLowTopVolts = 2;
+        public static final double kMidBottomPercent = 0.5;
+        public static final double kMidTopPercent = 0.75;
+        public static final double kHighBottomVelocity = .4;
+        public static final double kHighTopVelocity = .3;
     }
 
     public static final class ArmConstants {
@@ -165,7 +165,7 @@ public final class Constants {
         public static final int kRightMotorId = 18; //default: 19
 
         public static final int kCurrentLimit = 40;
-        public static final double kStowAmps = -3;
+        public static final double kStowVolts = -2.5;
 
         public static final double kArmDownPercent = 0.3; // Percent
         public static final double kArmUpPercent = 0.3; // Percernt

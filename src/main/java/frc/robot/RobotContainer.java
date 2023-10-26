@@ -40,9 +40,9 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
-                () -> driver.getRawAxis(translationAxis), 
-                () -> driver.getRawAxis(strafeAxis), 
-                () -> driver.getRawAxis(rotationAxis), 
+                () -> -driver.getRawAxis(translationAxis), 
+                () -> -driver.getRawAxis(strafeAxis), 
+                () -> -driver.getRawAxis(rotationAxis), 
                 () -> driver.leftBumper().getAsBoolean()
             )
         );
@@ -61,7 +61,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Drivetrain*/
         driver.back().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        driver.start().onTrue(new InstantCommand(() -> s_Swerve.teleopGyro()));
+        driver.start().onTrue(new InstantCommand(() -> s_Swerve.resetModulesToAbsolute()));
         
         driver.leftBumper().onTrue(new HeadingCorrectionDrive(
             s_Swerve, 

@@ -142,7 +142,7 @@ public class SwerveSubsystem extends SubsystemBase {
         }
     }
 
-    public Command lockWheels() {
+    /*public Command lockWheels() {
         return this.run(() -> {
             SwerveModuleState[] desiredState = {
                 new SwerveModuleState(0, new Rotation2d(Math.PI / 4)),
@@ -152,7 +152,7 @@ public class SwerveSubsystem extends SubsystemBase {
             };
             setModuleStates(desiredState);
         });
-    }  
+    }*/  
 
     @Override
     public void periodic(){

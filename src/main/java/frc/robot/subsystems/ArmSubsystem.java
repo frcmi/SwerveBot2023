@@ -17,7 +17,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public ArmSubsystem() {
         leftMotor.setNeutralMode(NeutralMode.Brake);
-        leftMotor.setInverted(TalonFXInvertType.CounterClockwise);
+        leftMotor.setInverted(TalonFXInvertType.Clockwise);
         leftMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40.0, 60.0, 0.1));
         
         rightMotor.follow(leftMotor);
@@ -40,7 +40,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public CommandBase stow(){
-        return run(() -> leftMotor.set(TalonFXControlMode.Current, ArmConstants.kStowAmps)).withName("Stow"); 
+        return run(() -> leftMotor.setVoltage(ArmConstants.kStowVolts)).withName("Stow"); 
     }
 
     @Override
