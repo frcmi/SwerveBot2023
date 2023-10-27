@@ -31,9 +31,28 @@ public class ArmSubsystem extends SubsystemBase {
         return run(() -> leftMotor.set(TalonFXControlMode.PercentOutput, ArmConstants.kArmDownPercent)).withName("Wrist Down");
     }
 
-    public CommandBase wristUp(){
-        return run(() -> leftMotor.set(TalonFXControlMode.PercentOutput, -ArmConstants.kArmUpPercent)).withName("Wrist Up");
+    public CommandBase wristDownVolts(){
+        return run(() -> leftMotor.setVoltage(ArmConstants.kArmDownVolts)).withName("Wrist Down");
     }
+    
+    public CommandBase wristDownEndUp(){
+        return runEnd(() -> leftMotor.set(TalonFXControlMode.PercentOutput, ArmConstants.kArmDownPercent), 
+                     () -> wristUp()).withName("Wrist Down");
+    }
+
+    public CommandBase wristDownEndUpVolts(){
+        return runEnd(() -> leftMotor.setVoltage(ArmConstants.kArmDownPercent), 
+                     () -> wristUp()).withName("Wrist Down");
+    }
+
+    public CommandBase wristUpVolts(){
+        return run(() -> leftMotor.setVoltage(-ArmConstants.kArmUpVolts)).withName("Wrist Up").withTimeout(.5);
+    }
+
+    public CommandBase wristUp(){
+        return run(() -> leftMotor.set(TalonFXControlMode.PercentOutput, -ArmConstants.kArmUpPercent)).withName("Wrist Up").withTimeout(.5);
+    }
+
 
     public CommandBase stop() {
         return run(() -> leftMotor.set(TalonFXControlMode.PercentOutput, 0)).withName("Stop");

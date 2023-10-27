@@ -165,10 +165,12 @@ public final class Constants {
         public static final int kRightMotorId = 18; //default: 19
 
         public static final int kCurrentLimit = 40;
-        public static final double kStowVolts = -2.5;
+        public static final double kStowVolts = -1.5;
 
         public static final double kArmDownPercent = 0.3; // Percent
         public static final double kArmUpPercent = 0.3; // Percernt
-        
+
+        public static final double kArmDownVolts = 3; // Percent
+        public static final double kArmUpVolts = 3;
     }
 }

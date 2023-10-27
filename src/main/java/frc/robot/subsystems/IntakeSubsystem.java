@@ -37,44 +37,44 @@ public class IntakeSubsystem extends SubsystemBase {
     public void periodic() {
         var currentCommand = this.getCurrentCommand();
         if (currentCommand != null){
-            SmartDashboard.putString("Arm Command", currentCommand.getName());
+            SmartDashboard.putString("Intake Command", currentCommand.getName());
         } else {
-            SmartDashboard.putString("Arm Command", "");
+            SmartDashboard.putString("Intake Command", "");
         }
     }
 
     public CommandBase intake(){
         return run(
-                () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, IntakeConstants.kIntakePercent);
-                       topMotor.set(TalonFXControlMode.PercentOutput, IntakeConstants.kIntakePercent);}
+                () -> {bottomMotor.set(1);
+                       topMotor.set(1);}
         ).withName("Intake");
     }
 
     public CommandBase l1Shoot(){
         return run(
-                () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, -.2);
-                       topMotor.set(TalonFXControlMode.PercentOutput, -.2);}
+                () -> {bottomMotor.setVoltage(-2);
+                       topMotor.setVoltage(-2);}
         ).withName("L1 Shoot");
     }
 
     public CommandBase l2Shoot(){
         return run(
-                () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, -IntakeConstants.kMidBottomPercent);
-                       topMotor.set(TalonFXControlMode.PercentOutput, -IntakeConstants.kMidTopPercent);}
+                () -> {bottomMotor.setVoltage(-4);
+                       topMotor.setVoltage(-6);}
         ).withName("L2 Shoot");
     }
 
     public CommandBase l3Shoot(){
-       return run(
-                () -> {bottomMotor.set(TalonFXControlMode.PercentOutput, -1);
-                       topMotor.set(TalonFXControlMode.PercentOutput,-.9);}
+        return run(
+                () -> {bottomMotor.setVoltage(-8);
+                       topMotor.setVoltage(-6);}
         ).withName("L3 Shoot");
     }
 
     public CommandBase hold() {
         return run(
-            () -> {bottomMotor.setVoltage(IntakeConstants.kHoldVolts);
-                   topMotor.setVoltage(IntakeConstants.kHoldVolts);}
+            () -> {bottomMotor.setVoltage(2);
+                   topMotor.setVoltage(2);}
         ).withName("Hold");
     }
 

@@ -71,11 +71,13 @@ public class RobotContainer {
         ));
 
         // Arm
-        driver.povUp().whileTrue(s_Arm.wristUp());
-        driver.povDown().whileTrue(s_Arm.wristDown());
+        //driver.povUp().whileTrue(s_Arm.wristUp());
+        //driver.povDown().whileTrue(s_Arm.wristDown());
+        driver.povUp().whileTrue(s_Arm.wristUpVolts());
+        driver.povDown().whileTrue(s_Arm.wristDownVolts());
 
         // Intake
-        driver.rightTrigger().whileTrue(Commands.parallel(s_Intake.intake(), s_Arm.wristDown()));
+        driver.rightTrigger().whileTrue(Commands.parallel(s_Intake.intake(), s_Arm.wristDownEndUpVolts()));
         driver.leftTrigger().whileTrue(s_Intake.l1Shoot());
 
         driver.a().whileTrue(s_Intake.l1Shoot());
