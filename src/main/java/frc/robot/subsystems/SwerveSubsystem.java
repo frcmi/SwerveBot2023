@@ -163,6 +163,7 @@ public class SwerveSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
+        SmartDashboard.putNumber("Yaw", gyro.getYaw());
     }
     public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
             return new SequentialCommandGroup(

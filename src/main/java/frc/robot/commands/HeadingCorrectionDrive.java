@@ -27,6 +27,7 @@ public class HeadingCorrectionDrive extends CommandBase {
 
         this.heading = heading;
         headingController = new PIDController(.05, 0, 0);
+        headingController.enableContinuousInput(0, 360);
     }
 
     @Override
